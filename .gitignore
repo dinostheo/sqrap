@@ -59,3 +59,7 @@ typings/
 
 # next.js build output
 .next
+
+# dev files
+providers.json
+test.js
