@@ -11,7 +11,8 @@ module.exports = {
     'no-plusplus': 'off'
   },
   env: {
-    node: true
+    node: true,
+    jest: true
   },
   parserOptions: {
     sourceType: 'script',
