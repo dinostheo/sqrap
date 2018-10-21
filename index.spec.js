@@ -51,16 +51,15 @@ const selectors = {
   ]
 };
 
-// Mocks the http request
-nock('https://example.com')
-  .defaultReplyHeaders({
-    'Content-Type': 'text/html'
-  })
-  .get('/')
-  .reply(200, () => fs.createReadStream('./mock.html'));
-
 describe('Scrapes the website info based on a selectors object', () => {
   test('Test that the scraper extracted the proper content from the html page', async () => {
+    nock('https://example.com')
+      .defaultReplyHeaders({
+        'Content-Type': 'text/html'
+      })
+      .get('/')
+      .reply(200, () => fs.createReadStream('./mock.html'));
+
     const content = await sqrap('https://example.com/', { selectors });
 
     expect(content.authorName).toEqual('John');
@@ -71,5 +70,38 @@ describe('Scrapes the website info based on a selectors object', () => {
     expect(content.html).toEqual(
       '\n        <p>This is a paragraph with a <a href="https://example.com/somelink">link</a>.\n      </p>\n          <p>This is extra.\n        </p>'
     );
+
+    nock.cleanAll();
+  });
+
+  test('Test that the scraper throws an error when the content type is not "text/html"', async () => {
+    nock('https://example.com')
+      .defaultReplyHeaders({
+        'Content-Type': 'application/json'
+      })
+      .get('/')
+      .reply(200, { status: 'ok' });
+
+    try {
+      await sqrap('https://example.com/', { selectors });
+    } catch (error) {
+      expect(error.message).toEqual('Unsupported content type application/json');
+    }
+
+    nock.cleanAll();
+  });
+
+  test('Test that the scraper throws an error when the response status code is not 200', async () => {
+    nock('https://example.com')
+      .get('/')
+      .reply(500);
+
+    try {
+      await sqrap('https://example.com/', { selectors });
+    } catch (error) {
+      expect(error.message).toEqual('Http status code 500');
+    }
+
+    nock.cleanAll();
   });
 });
