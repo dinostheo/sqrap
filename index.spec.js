@@ -104,4 +104,18 @@ describe('Scrapes the website info based on a selectors object', () => {
 
     nock.cleanAll();
   });
+
+  test('Test that the scraper throws an error when the response status code is not 200', async () => {
+    nock('https://example.com')
+      .get('/')
+      .reply(500);
+
+    try {
+      await sqrap('https://example.com/', { selectors });
+    } catch (error) {
+      expect(error.message).toEqual('Http status code 500');
+    }
+
+    nock.cleanAll();
+  });
 });

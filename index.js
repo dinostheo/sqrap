@@ -4,15 +4,9 @@ const request = require('request');
 const cheerio = require('cheerio');
 
 function extractField($, field, selectors) {
-  const fieldSelector = selectors[field] || defaultSelectors[field];
-
-  if (!fieldSelector || fieldSelector.length < 1) {
-    return;
-  }
-
   let fieldOutput = '';
 
-  for (const partialSelector of fieldSelector) {
+  for (const partialSelector of selectors[field]) {
     const { selector, text = false, html = false, attribute = null } = partialSelector;
 
     if (text) {

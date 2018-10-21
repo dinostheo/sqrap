@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier --single-quote --write index.js",
-    "lint": "eslint --ext .js index.js config",
+    "lint": "eslint --ext .js index.js",
     "precommit": "lint-staged",
     "test": "jest --verbose --coverage"
   },
