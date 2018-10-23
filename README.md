@@ -1,4 +1,6 @@
 # sqrap
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdinostheo%2Fsqrap.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdinostheo%2Fsqrap?ref=badge_shield)
+
 
 A configurable web scraper that can map information from a website using a json schema.
 
@@ -119,3 +121,7 @@ _Response_
   "content": "Google offered in:  <a href=\"http://www.google.com/setprefs?sig=0_66pRjBrpofhOEMhxHuwX235zuS4%3D&amp;hl=fy&amp;source=homepage&amp;sa=X&amp;ved=0ahUKEwiazsS12JzeAhUD2KQKHT_CBmQQ2ZgBCAU\">Frysk</a>  "
 }
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdinostheo%2Fsqrap.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdinostheo%2Fsqrap?ref=badge_large)
