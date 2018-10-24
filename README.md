@@ -2,6 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/dinostheo/sqrap.svg?style=svg)](https://circleci.com/gh/dinostheo/sqrap)
 [![Known Vulnerabilities](https://snyk.io/test/github/dinostheo/sqrap/badge.svg?targetFile=package.json)](https://snyk.io/test/github/dinostheo/sqrap?targetFile=package.json)
+[![codecov](https://codecov.io/gh/dinostheo/sqrap/branch/master/graph/badge.svg)](https://codecov.io/gh/dinostheo/sqrap)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdinostheo%2Fsqrap.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdinostheo%2Fsqrap?ref=badge_shield)
 
 A configurable web scraper that can map information from a website using a json schema.
