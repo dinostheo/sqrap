@@ -1,16 +1,18 @@
 {
   "name": "sqrap",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "sqrap is a configurable web scraper that can map information from a website using a json schema.",
   "main": "index.js",
   "scripts": {
     "format": "prettier --single-quote --write index.js",
     "lint": "eslint --ext .js index.js",
     "precommit": "lint-staged",
-    "test": "jest --verbose --coverage"
+    "test": "jest --verbose --coverage && codecov"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   },
   "repository": {
     "type": "git",
@@ -34,6 +36,7 @@
     "request": "^2.88.0"
   },
   "devDependencies": {
+    "codecov": "^3.1.0",
     "editorconfig": "^0.15.2",
     "eslint": "^5.7.0",
     "eslint-config-airbnb-base": "^13.1.0",
