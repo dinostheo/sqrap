@@ -3,17 +3,6 @@
 const request = require('request');
 const cheerio = require('cheerio');
 
-function extractGroupFields($, groupSelectors) {
-  const extractedFields = {};
-  const selectorProperties = Object.keys(groupSelectors);
-
-  for (const property of selectorProperties) {
-    extractedFields[property] = extractField($, property, groupSelectors, true);
-  }
-
-  return extractedFields;
-}
-
 function extractField($, field, selectors, nested = false) {
   let fieldOutput = '';
 
@@ -58,8 +47,13 @@ function extractField($, field, selectors, nested = false) {
       const all = $(selector);
 
       for (let i = 0, l = all.length; i < l; i++) {
-        const item = cheerio.load(all['' + i]);
-        const fields = extractGroupFields(item, groupSelectors);
+        const item = cheerio.load(all[`${i}`]);
+        const fields = {};
+        const selectorProperties = Object.keys(groupSelectors);
+
+        for (const property of selectorProperties) {
+          fields[property] = extractField(item, property, groupSelectors, true);
+        }
 
         groupFields.push(fields);
       }

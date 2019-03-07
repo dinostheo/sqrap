@@ -203,7 +203,11 @@ describe('Scrapes the website info based on a selectors object', () => {
     });
 
     const content = await sqrap('https://example.com/', { selectors: testSelectors });
-    console.log('>> ', content);
+
+    expect(content.group.length).toEqual(3);
+    expect(content.group[0].member).toEqual('One');
+    expect(content.group[1].member).toEqual('Two');
+    expect(content.group[2].member).toEqual('Three');
 
     nock.cleanAll();
   });
