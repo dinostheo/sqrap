@@ -87,8 +87,8 @@ module.exports = (originUrl, config = {}) =>
         for (const property of selectorProperties) {
           extractedFields[property] = extractField($, property, selectors);
         }
-      } catch (error) {
-        return reject(error);
+      } catch (err) {
+        return reject(err);
       }
 
       resolve(extractedFields);
