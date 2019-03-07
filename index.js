@@ -3,11 +3,29 @@
 const request = require('request');
 const cheerio = require('cheerio');
 
-function extractField($, field, selectors) {
+function extractGroupFields($, groupSelectors) {
+  const extractedFields = {};
+  const selectorProperties = Object.keys(groupSelectors);
+
+  for (const property of selectorProperties) {
+    extractedFields[property] = extractField($, property, groupSelectors, true);
+  }
+
+  return extractedFields;
+}
+
+function extractField($, field, selectors, nested = false) {
   let fieldOutput = '';
 
   for (const partialSelector of selectors[field]) {
-    const { selector, text = false, html = false, attribute = null } = partialSelector;
+    const {
+      selector,
+      text = false,
+      html = false,
+      attribute = null,
+      group = false,
+      groupSelectors
+    } = partialSelector;
 
     if (text) {
       fieldOutput += $(selector)
@@ -25,6 +43,28 @@ function extractField($, field, selectors) {
 
     if (html) {
       fieldOutput += $(selector).html();
+    }
+
+    if (group) {
+      if (nested) {
+        throw new Error('Nested group selectors are not allowed.');
+      }
+
+      if (!groupSelectors) {
+        throw new Error('Group selection missing group selectors.');
+      }
+
+      const groupFields = [];
+      const all = $(selector);
+
+      for (let i = 0, l = all.length; i < l; i++) {
+        const item = cheerio.load(all['' + i]);
+        const fields = extractGroupFields(item, groupSelectors);
+
+        groupFields.push(fields);
+      }
+
+      return groupFields;
     }
   }
 
@@ -49,8 +89,12 @@ module.exports = (originUrl, config = {}) =>
       const extractedFields = {};
       const selectorProperties = Object.keys(selectors);
 
-      for (const property of selectorProperties) {
-        extractedFields[property] = extractField($, property, selectors);
+      try {
+        for (const property of selectorProperties) {
+          extractedFields[property] = extractField($, property, selectors);
+        }
+      } catch (error) {
+        return reject(error);
       }
 
       resolve(extractedFields);

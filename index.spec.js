@@ -68,7 +68,7 @@ describe('Scrapes the website info based on a selectors object', () => {
     expect(content.text).toEqual('This is a paragraph with a link.This is extra.');
     expect(content.image).toEqual('https://cdn.example.com/someimage');
     expect(content.html).toEqual(
-      '\n        <p>This is a paragraph with a <a href="https://example.com/somelink">link</a>.\n      </p>\n          <p>This is extra.\n        </p>'
+      '\n        <p>This is a paragraph with a <a href="https://example.com/somelink">link</a>.</p>\n      <p>This is extra.</p>'
     );
 
     nock.cleanAll();
@@ -115,6 +115,95 @@ describe('Scrapes the website info based on a selectors object', () => {
     } catch (error) {
       expect(error.message).toEqual('Http status code 500');
     }
+
+    nock.cleanAll();
+  });
+
+  test('Test that the scraper throws an error when a group has no groupSelectors defined', async () => {
+    nock('https://example.com')
+      .defaultReplyHeaders({
+        'Content-Type': 'text/html'
+      })
+      .get('/')
+      .reply(200, () => fs.createReadStream('./mock.html'));
+
+    try {
+      const testSelectors = Object.assign(selectors, {
+        group: [
+          {
+            selector: '.group',
+            group: true
+          }
+        ]
+      });
+      await sqrap('https://example.com/', { selectors: testSelectors });
+    } catch (error) {
+      expect(error.message).toEqual('Group selection missing group selectors.');
+    }
+
+    nock.cleanAll();
+  });
+
+  test('Test that the scraper throws an error when a group has a nested group', async () => {
+    nock('https://example.com')
+      .defaultReplyHeaders({
+        'Content-Type': 'text/html'
+      })
+      .get('/')
+      .reply(200, () => fs.createReadStream('./mock.html'));
+
+    try {
+      const testSelectors = Object.assign({}, selectors, {
+        group: [
+          {
+            selector: '.group',
+            group: true,
+            groupSelectors: {
+              willFail: [
+                {
+                  selector: '.member',
+                  group: true
+                }
+              ]
+            }
+          }
+        ]
+      });
+      await sqrap('https://example.com/', { selectors: testSelectors });
+    } catch (error) {
+      expect(error.message).toEqual('Nested group selectors are not allowed.');
+    }
+
+    nock.cleanAll();
+  });
+
+  test('Test that the scraper extracts an array of objects for a specified group', async () => {
+    nock('https://example.com')
+      .defaultReplyHeaders({
+        'Content-Type': 'text/html'
+      })
+      .get('/')
+      .reply(200, () => fs.createReadStream('./mock.html'));
+
+    const testSelectors = Object.assign({}, selectors, {
+      group: [
+        {
+          selector: '.group',
+          group: true,
+          groupSelectors: {
+            member: [
+              {
+                selector: '.member',
+                text: true
+              }
+            ]
+          }
+        }
+      ]
+    });
+
+    const content = await sqrap('https://example.com/', { selectors: testSelectors });
+    console.log('>> ', content);
 
     nock.cleanAll();
   });
