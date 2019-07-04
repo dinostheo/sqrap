@@ -7,7 +7,9 @@
     "format": "prettier --single-quote --write index.js",
     "lint": "eslint --ext .js index.js",
     "precommit": "lint-staged & npm test",
-    "test": "jest --verbose --coverage && codecov"
+    "test": "jest --verbose --coverage && codecov",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "jest": {
     "testEnvironment": "node",
@@ -33,7 +35,8 @@
   "homepage": "https://github.com/dinostheo/sqrap#readme",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "codecov": "^3.1.0",
@@ -47,5 +50,6 @@
     "lint-staged": "^8.1.0",
     "nock": "^10.0.6",
     "prettier": "^1.15.3"
-  }
+  },
+  "snyk": true
 }
